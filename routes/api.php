@@ -27,5 +27,16 @@ Route::post('/start', function (Request $request) {
 });
 
 Route::post('/move', function (Request $request) {
+    $moveRequest = new MoveRequest($request->json()->all());
 
+    // choosing the standard engine for processing the move
+    $engine = new \App\Models\Engines\StandardEngine();
+
+    // making the engine calculate the next move based on the request
+    $move = $engine->processMove($moveRequest);
+
+    return response()->json([
+        'move' => $move,
+        'shout' => 'Moving ' . $move,
+    ]);
 });
